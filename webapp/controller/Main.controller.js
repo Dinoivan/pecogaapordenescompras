@@ -150,7 +150,7 @@ sap.ui.define([
        </soapenv:Body>\
     </soapenv:Envelope>';
     
-            var url = "./ODATA_FIORI_GATEWAY_CLONING/sap/bc/srt/rfc/sap/zmm_po_relm/600/zmm_po_relm/zmm_po_relm";
+            var url = "/sap/bc/srt/rfc/sap/zmm_po_relm/600/zmm_po_relm/zmm_po_relm";
     
             return jQuery.ajax({
                 url: url,
@@ -185,7 +185,7 @@ sap.ui.define([
        </soapenv:Body>\
     </soapenv:Envelope>';
     
-            var url = "./ODATA_FIORI_GATEWAY_CLONING/sap/bc/srt/rfc/sap/zmm_po_relm/600/zmm_po_relm/zmm_po_relm";
+            var url = "/sap/bc/srt/rfc/sap/zmm_po_relm/600/zmm_po_relm/zmm_po_relm";
     
             return jQuery.ajax({
                 url: url,
@@ -322,7 +322,7 @@ sap.ui.define([
         },
         onAnterior: function () {
     
-            variable = false;
+            //variable = false;
     
             $.selectedItems = [];
             this.getOwnerComponent().getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
@@ -338,7 +338,7 @@ sap.ui.define([
     
             /* cargando el usuario actual */
             var userapi = new sap.ui.model.json.JSONModel();
-            userapi.loadData("/services/userapi/attributes", null, false);
+            userapi.loadData(this.getUrlBase() +"user-api/attributes", null, false);
             
             //select="_handleSelectPress"
             $.ListPO.attachSelect(this._handleSelectPress, this);
@@ -371,8 +371,8 @@ sap.ui.define([
                '</soapenv:Body>' +
             '</soapenv:Envelope>';
     
-            //var url2 = "./ODATA_FIORI_GATEWAY_CLONING/sap/bc/srt/rfc/sap/zfiori_datos_adicionales_me28/600/zws_zfiori_datos_adicionales_me2/zws_zfiori_datos_adicionales_me2";
-            //var url2 = "./ODATA_FIORI_GATEWAY_CLONING//sap/opu/odata/SAP/GBAPP_POAPPROVAL;mo/WorkflowTaskCollection?$skip=0&$top=1000000&$orderby=WiCreatedAt%20desc&$inlinecount=allpages";
+            //var url2 = "/sap/bc/srt/rfc/sap/zfiori_datos_adicionales_me28/600/zws_zfiori_datos_adicionales_me2/zws_zfiori_datos_adicionales_me2";
+            //var url2 = "//sap/opu/odata/SAP/GBAPP_POAPPROVAL;mo/WorkflowTaskCollection?$skip=0&$top=1000000&$orderby=WiCreatedAt%20desc&$inlinecount=allpages";
             
             var l = this.getView().byId("list");
             var w =this;
@@ -419,7 +419,7 @@ sap.ui.define([
                            '</soapenv:Body>' +
                         '</soapenv:Envelope>';
                 
-                        var url = "./ODATA_FIORI_GATEWAY_CLONING/sap/bc/srt/rfc/sap/zfiori_datos_adicionales_me28/600/zws_zfiori_datos_adicionales_me2/zws_zfiori_datos_adicionales_me2";
+                        var url = "/sap/bc/srt/rfc/sap/zfiori_datos_adicionales_me28/600/zws_zfiori_datos_adicionales_me2/zws_zfiori_datos_adicionales_me2";
                 
                         this.jQueryDeferred = jQuery.Deferred();
                         jQuery.ajax({
@@ -591,7 +591,7 @@ sap.ui.define([
 
             // Construcción de la URL para expandir datos
             var sPath = "/WorkflowTaskCollection(SAP__Origin='LOCAL',WorkitemID='" + oData.WorkitemID + "')/HeaderDetails";
-            var aExpand = ["ItemDetails", "Notes", "Attachments", "ItemDetails/Limits"];
+            var aExpand = ["HeaderItemDetails", "Notes", "Attachments", "HeaderItemDetails/Limits"];
             
             var oModel = this.getView().getModel();
 
@@ -709,7 +709,7 @@ sap.ui.define([
                             </soapenv:Body>\
                             </soapenv:Envelope>';
     
-                    var url = "./ODATA_FIORI_GATEWAY_CLONING/sap/bc/srt/rfc/sap/zfiori_liberador_doc/600/zfiori_liberador_doc/zfiori_liberador_doc";
+                    var url = "/sap/bc/srt/rfc/sap/zfiori_liberador_doc/600/zfiori_liberador_doc/zfiori_liberador_doc";
     
                     var sGetAprobadores = jQuery.ajax({
                         url: url,
