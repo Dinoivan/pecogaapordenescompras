@@ -115,6 +115,68 @@
                                 </form:Form>
                             </content>
                         </IconTabFilter>
+
+                        <IconTabFilter id="IconTabBarFilterPOApprovers" icon="sap-icon://account">
+                            <content>
+                                    <Table id="idProductsTable"
+                                        inset="false"
+                                        items="{
+                                            path: 'aprobadores>/'
+                                        }">
+                                        
+                                        <columns>
+                                            <Column
+                                                width="5em">
+                                                <Text text="Orden" />
+                                            </Column>
+                                            <Column>
+                                                <Text text="Nombre" />
+                                            </Column>
+                                            <Column>
+                                                <Text text="Usuario SAP" />
+                                            </Column>
+                                            <Column>
+                                                <Text text="Aprobado" />
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem>
+                                                <cells>
+                                                    <ObjectStatus
+                                                        text="{aprobadores>Secuencia}" state="{path:'aprobadores>Aprobado'}" />
+                                                    <ObjectStatus
+                                                        text="{aprobadores>Nombre}" state="{path:'aprobadores>Aprobado'}"/>
+                                                    <ObjectStatus
+                                                        text="{aprobadores>IdSap}" state="{path:'aprobadores>Aprobado'}"/>
+                                                    <ObjectStatus
+                                                        text="{aprobadores>Aprobado}" state="Success"/>
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                            </content>
+                            
+                        </IconTabFilter>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     </items>
                 </IconTabBar>
 
