@@ -23,6 +23,14 @@
       "authenticationType": "xsuaa",
       "csrfProtection": false
     },
+
+    {
+      "source": "^/ODATA_FIORI_GATEWAY/(.*)$",
+      "target": "$1",
+      "destination": "ODATA_FIORI_GATEWAY_CLONING",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
     {
       "source": "^/user-api(.*)",
       "target": "$1",
