@@ -28,17 +28,26 @@
       }
     },
     "crossNavigation": {
-            "inbounds": {
-                "intent1": {
-                    "signature": {
-                        "parameters": {},
-                        "additionalParameters": "allowed"
-                    },
-                    "semanticObject": "Dynamic",
-                    "action": "display"
-                }
-            }
+      "inbounds": {
+        "dynamicTile": {
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          },
+          "semanticObject": "AprobacionOrden",
+          "action": "display",
+         "title": "Aprobación de\u000AÓrdenes de Compra",
+          "subTitle": "Órdenes de Compra",
+          "info": "Pendientes",
+          "icon": "sap-icon://task",
+          "indicatorDataSource": {
+            "dataSource": "mainService",
+            "path": "/e0209638-fd00-463d-85f6-043e15fa15fd.pecogaapordenescompras.pecogaapordenescompras/~ebcced5a-7322-4c56-be61-26dbd5678731~/sap/opu/odata/SAP/GBAPP_POAPPROVAL;mo/WorkflowTaskCollection/$count",
+            "refresh": 5
+          }
         }
+      }
+    }
   },
   "sap.ui": {
     "technology": "UI5",
@@ -110,13 +119,22 @@
           "target": [
             "TargetMain"
           ]
+        },
+        {
+          "name": "ItemDetail",
+          "pattern": "ItemDetail/{SAP__Origin}/{PoNumber}/{ItemNumber}",
+          "target": "ItemDetail"
         }
       ],
       "targets": {
         "TargetMain": {
           "id": "Main",
           "name": "Main"
-        }
+        },
+        "ItemDetail": {
+        "viewName": "ItemDetail",
+        "viewLevel": 2
+       }
       }
     },
     "rootView": {

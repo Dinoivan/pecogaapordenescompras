@@ -1,0 +1,130 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.uxap"
+    xmlns:form="sap.ui.layout.form"
+    controllerName="pecogaapordenescompras.controller.ItemDetail">
+
+    <layout:ObjectPageLayout>
+        <layout:headerTitle>
+            <layout:ObjectPageHeader
+                objectTitle="{detail>/Description}"
+                objectSubtitle="{detail>/ItemCategoryDescription}"
+                 number="{detail>/Value}"
+                 numberUnit="{detail>/Currency}" />
+        </layout:headerTitle>
+
+        <layout:sections>
+            <!-- Sección de Información -->
+            <layout:ObjectPageSection title="Información">
+                <layout:subSections>
+                    <layout:ObjectPageSubSection>
+                         <HBox>
+                            <Label text="Grupo de materiales:" />
+                            <Text text="  {= ${detail>/ProductDetails/MaterialGroupDescription} + ' (' + ${detail>/ProductDetails/MaterialGroup} + ')' }" />
+                        </HBox>
+                    </layout:ObjectPageSubSection>
+                </layout:subSections>
+            </layout:ObjectPageSection>
+
+            <!-- Sección de Entrega -->
+           <layout:ObjectPageSection title="{path: 'detail>/DeliveryDate', formatter: '.formatFechaUTC'}">
+                <layout:subSections>
+                    <layout:ObjectPageSubSection>
+                        <VBox>
+                            <form:Form>
+                                <form:layout>
+                                    <form:ResponsiveGridLayout />
+                                </form:layout>
+
+                                <form:formContainers>
+                                    <form:FormContainer>
+                                        <form:formElements>
+
+                                            <form:FormElement>
+                                                <form:fields>
+                                                    <HBox>
+                                                        <Label text="Centro: " />
+                                                        <Text text=" {detail>/DeliveryAddress/PlantName}" />
+                                                    </HBox>
+                                                </form:fields>
+                                            </form:FormElement>
+
+                                            <form:FormElement>
+                                                <form:fields>
+                                                    <HBox>
+                                                        <Label text="Dirección: " />
+                                                        <Text text=" {detail>/DeliveryAddress/AddressString}" />
+                                                    </HBox>
+                                                </form:fields>
+                                            </form:FormElement>
+
+                                        </form:formElements>
+                                    </form:FormContainer>
+                                </form:formContainers>
+                            </form:Form>
+                        </VBox>
+                    </layout:ObjectPageSubSection>
+                </layout:subSections>
+            </layout:ObjectPageSection>
+
+          <!-- Sección de Líneas de Servicio -->
+                <layout:ObjectPageSection title="Líneas de servicio ({detail>/ItemNumberFormatted})">
+                    <layout:subSections>
+                        <layout:ObjectPageSubSection>
+                            <Table items="{detail>/ServiceLines/results}">
+                                <columns>
+                                    <Column>
+                                        <Text text="Descripción" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Cantidad" />
+                                    </Column>
+                                    <Column>
+                                        <Text text="Subtotal" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem type="Navigation" press="onServiceLinePress">
+                                        <cells>
+                                            <Text text="{detail>/Description}" />
+                                            <Text text="{detail>/Quantity} {detail>/UnitDescription}" />
+                                            <Text text="{detail>/Value} {detail>/Currency}" />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </layout:ObjectPageSubSection>
+                    </layout:subSections>
+                </layout:ObjectPageSection>
+
+            <!-- Sección de Condiciones de Precio -->
+            <layout:ObjectPageSection title="Condiciones de precio">
+                <layout:subSections>
+                    <layout:ObjectPageSubSection>
+                        <Table items="{detail>/PricingConditions/results}">
+                            <columns>
+                                <Column>
+                                    <Text text="Descripción" />
+                                </Column>
+                                <Column>
+                                    <Text text="Precio" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{detail/Description} {detail/PricingConditionType}" />
+                                        <Text text="{detail/Value} {detail/Currency}" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </layout:ObjectPageSubSection>
+                </layout:subSections>
+            </layout:ObjectPageSection>
+
+        </layout:sections>
+    </layout:ObjectPageLayout>
+</mvc:View>
