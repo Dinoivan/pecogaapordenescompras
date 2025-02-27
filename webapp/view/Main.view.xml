@@ -205,7 +205,7 @@
                             </IconTabFilter>
 
                             <IconTabFilter id="IconTabBarFilterPRNotes" key="Notes" count="{detail>/NumberOfNotes}"
-                            visible="{path : 'NumberOfNotes', formatter : 'pecogaapordenescompras.util.Conversions.notesVisibilityTrigger'}"
+                            visible="{path : 'detail>/NumberOfNotes', formatter: '.notesVisibilityTrigger'}"
                             icon="sap-icon://notes">
                               <List id="listNotes" showSeparators="None" inset="true" items="{path : 'detail>/Notes/results'}">
                                 <FeedListItem id="NoteTemplate"
@@ -213,6 +213,18 @@
                                     senderPress="onNoteSenderPress" text="{detail>Text}" info="{detail>TypeDescription}"></FeedListItem>
                               </List>
                            </IconTabFilter>
+
+                           <IconTabFilter id="IconTabBarFilterPRAttachments" key="Attachments" count="{detail>/NumberOfAttachments}"
+                                            visible="{path : 'detail>/Attachments/results', formatter: '.attachmentsVisibilityTrigger'}"
+                                            icon="sap-icon://attachment">
+                                    <List id="listAttachments" showSeparators="None" inset="true" items="{path : 'detail>/Attachments/results'}">
+                                        <StandardListItem title="{detail>Description}" 
+                                                        description="{= Math.round(${detail>FileSize} / 1024) + ' KB'}"
+                                                        icon="sap-icon://pdf-attachment"
+                                                        type="Navigation"
+                                                        press="onAttachmentPress"/>
+                                    </List>
+                                </IconTabFilter>
 
 
                             <IconTabFilter id="IconTabBarFilterPOApprovers" icon="sap-icon://account">
@@ -265,7 +277,7 @@
                     <!-- Item table on S3 screen -->
                     <Table id="itemsTable" items="{detail>/ItemDetails/results}" noDataText="{i18n>view.PurchaseContract.placeholder}" class="detailControlPadding"
                         growing="true" growingScrollToLoad="false"
-                        headerText="{i18n>view.PurchaseOrder.multipleItems} ({path : 'detail>/NumberOfItems'})">
+                        headerText="{i18n>view.PurchaseOrder.multipleItems} ({= ${detail>/ItemDetails/results}.length })">
                         <columns>
                             <Column hAlign="Begin" id="ItemsTableColumnDescription">
                                 <header>
@@ -292,7 +304,13 @@
                         <items>
                             <ColumnListItem type="Navigation" press="onLineItemPress">
                                 <cells>
-                                    <ObjectIdentifier title="{detail>Description}"></ObjectIdentifier>
+                                <HBox>
+                                 <ObjectIdentifier title="{detail>Description}"/>
+                                 <core:Icon src="sap-icon://document-text" visible="{= ${detail>/Notes/results}.length > 0}"
+                                 tooltip="Archivo adjunto"
+                                 size="1rem"
+                                class="sapUiTinyMarginTop"/>
+                                </HBox>
                                     <Text
                                         text="{path : 'detail>ItemCategoryDescription'}"></Text>
                                     <ObjectNumber number="{path: 'detail>Quantity'}"
@@ -340,6 +358,10 @@
                         <Panel headerText="Información">
                             <content>
                                 <VBox alignItems="Center">
+                                    <HBox visible="{= ${detalle>/Notes/results}.length > 0}">
+                                        <Label text="Materiales: " width="4rem"/>
+                                        <Text text="{= ${detalle>/ProductDetails/MaterialID} }"/>
+                                    </HBox>
                                     <HBox>
                                         <Label text="Grupo de materiales: " width="10rem"/>
                                         <Text text="{= ${detalle>/ProductDetails/MaterialGroupDescription} + ' (' + ${detalle>/ProductDetails/MaterialGroup} + ')' }" />
@@ -372,7 +394,7 @@
                         </Panel>
 
                         <!-- Líneas de servicio -->
-                        <Panel headerText="Líneas de servicio ({= ${detalle>/ServiceLines/results}.length})">
+                        <Panel headerText="Líneas de servicio ({= ${detalle>/ServiceLines/results}.length})" visible="{= ${detalle>/ServiceLines/results}.length > 0}" >
                             <content>
                                 <Table items="{detalle>/ServiceLines/results}">
                                     <columns>
@@ -396,6 +418,18 @@
                                         </ColumnListItem>
                                     </items>
                                 </Table>
+                            </content>
+                        </Panel>
+
+                        <Panel headerText="Notas" visible="{= ${detalle>/Notes/results}.length > 0}" >
+                            <content>
+                               
+                              <List id="listNotess" showSeparators="None" inset="true" items="{path : 'detalle>/Notes/results'}">
+                                <FeedListItem id="NoteTemplatee"
+                                    icon="{detalle>Thumbnail}"
+                                    senderPress="onNoteSenderPress" text="{detalle>Text}" info="{detalle>TypeDescription}"></FeedListItem>
+                              </List>
+                          
                             </content>
                         </Panel>
 

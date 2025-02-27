@@ -74,7 +74,15 @@ sap.ui.define([
                     }
                 },
 
-        onAfterRendering: function () {
+                notesVisibilityTrigger: function(iNumberOfNotes) {
+                    return iNumberOfNotes > 0; // Retorna `true` si es mayor a 0, `false` si es 0
+                },
+
+                attachmentsVisibilityTrigger: function(aAttachments) {
+                    return aAttachments && aAttachments.length > 0;
+                },
+
+           onAfterRendering: function () {
             // Obtener la referencia de la lista
             const oList = this.byId("list");
             var that = this;
@@ -317,6 +325,7 @@ sap.ui.define([
                 }
             });
         },
+
 
         onShowQuickViewProveedor: function (oEvent) {
             var oButton = oEvent.getSource(); // El botón que activa el QuickView
@@ -721,19 +730,15 @@ sap.ui.define([
            var that = this;
    
            $.selectedItems = [];
-           //this.getOwnerComponent().getRouter().attachRoutePatternMatched(this.onRouteMatched, this);
            $.ListPO = this.getView().byId("list");
-           //this.setFooter();
-           //sap.ui.core.BusyIndicator.show(0);
-   
-           /* cargando el usuario actual */
-           //var userapi = new sap.ui.model.json.JSONModel();
-           //userapi.loadData("/services/userapi/attributes", "", false);
-           
+
+           debugger
+           console.log("seleccionado: ", $.ListPO);
+     
            //select="_handleSelectPress"
            $.ListPO.attachSelect(this._handleSelectPress, this);
-           
-           
+
+           console.log("Llamando a _handleSelectPress: ");
            
            console.log("setTimeout() Ejemplo...");
            //var user2 =userapi.getData().name.toUpperCase();
@@ -802,7 +807,6 @@ sap.ui.define([
                                       '<ZdateNew></ZdateNew>' +
                                    '</item>' +
                                 '</TOutputNp>' +
-                                //'<User>' + userapi.getData().name.toUpperCase() + '</User>' +
                              '</urn:ZfioriDatosAdicionalesMe28>' +
                           '</soapenv:Body>' +
                        '</soapenv:Envelope>';
@@ -844,9 +848,9 @@ sap.ui.define([
                                        }.bind(w));
                                        if (find) {
                                            if (parseFloat(find.ZvalDiff) > 0) {
-                                                var text = "Valor Anterior: " + ui.s2p.mm.purcontract.approve.util.Conversions.lazyRoundNumber(find.ZvalAnterior);
+                                                var text = "Valor Anterior: " + pecogaapordenescompras.util.Conversions.lazyRoundNumber(find.ZvalAnterior);
                                                 l.getItems()[i].getAggregation("attributes")[4].setText(text);
-                                                var text2 = " Diferencia: " + ui.s2p.mm.purcontract.approve.util.Conversions.lazyRoundNumber(find.ZvalDiff);
+                                                var text2 = " Diferencia: " + pecogaapordenescompras.util.Conversions.lazyRoundNumber(find.ZvalDiff);
                                                 l.getItems()[i].getAggregation("attributes")[5].setText(text2);
                                             }
                                             // 	var text = "Valor Anterior: " + find.ZvalAnterior;
@@ -897,9 +901,9 @@ sap.ui.define([
                                        }.bind(w));
                                        if (find) {
                                            if (parseFloat(find.ZvalDiff) > 0) {
-                                               var text = "Valor Anterior: " + ui.s2p.mm.purchorder.approve.util.Conversions.lazyRoundNumber(find.ZvalAnterior);
+                                               var text = "Valor Anterior: " + pecogaapordenescompras.util.Conversions.lazyRoundNumber(find.ZvalAnterior);
                                                l.getItems()[i].getAggregation("attributes")[4].setText(text);
-                                               var text2 = " Diferencia: " + ui.s2p.mm.purchorder.approve.util.Conversions.lazyRoundNumber(find.ZvalDiff);
+                                               var text2 = " Diferencia: " + pecogaapordenescompras.approve.util.Conversions.lazyRoundNumber(find.ZvalDiff);
                                                l.getItems()[i].getAggregation("attributes")[5].setText(text2);
                                            }
                                                if (oRetorno[index_array]["ZdateNew"] != oRetorno[index_array]["ZdateOld"])
@@ -926,9 +930,6 @@ sap.ui.define([
                    console.log(x);
                }
            });
-   
-        
-   
        },
    
         setListItem: function (i) {
@@ -989,13 +990,17 @@ sap.ui.define([
        
             // Obtener el item correcto
             var item;
+            console.log("Evento Id: ",oEvent.getId());
             if (oEvent.getId() === "select") {
                 item = oEvent.getParameter("listItem");
+                console.log("Se selecciono el item de la lista: ",item);
             } else {
                 item = oEvent.getSource();
+                console.log("Se selecciono el item del contexto: ",item);
             }
         
             // Validar que item sea un ObjectListItem antes de continuar
+            console.log("Se selecciono el item del contexto: ",item.type);
             if (!(item instanceof sap.m.ObjectListItem)) {
                 this.getView().setBusy(false);
                 console.error("El evento no proviene de un ObjectListItem.");
@@ -1003,6 +1008,7 @@ sap.ui.define([
             }
         
             var oItem = item.getBindingContext().getObject();
+            console.log("Contexto encontrado: ",oItem);
             if (!oItem) {
                 this.getView().setBusy(false);
                 console.error("No se encontró un objeto válido en el contexto.");
@@ -1049,11 +1055,12 @@ sap.ui.define([
         },
         
         _handleItemPress: function (oEvent) {
+            debugger
             console.log("--_handleItemPress--");
         
-            var isPhone = this.getView().getModel("device").getData().isPhone;
+            // var isPhone = this.getView().getModel("device").getData().isPhone;
+            console.log("Evento en _handleItemPress: ",oEvent);
             this.fnCargarAprobadores(oEvent);
-        
             try {
                 this._handleItemPressDesktop(oEvent);
             } catch (e) {
@@ -1061,59 +1068,42 @@ sap.ui.define([
             }
         },
 
-        // _handleItemPressDesktop: function (e) {
-        //     console.log("_handleItemPressDesktop");
-        //     this.setListItem(e);
-        //     if (!sap.ui.Device.system.phone) {
-        //         this._oApplicationImplementation.oSplitContainer.hideMaster();
-        //     }
-        // },
-   
-        // _handleItemPress: function(oEvent) {
-        //     debugger
-        //     var itemList = oEvent.getSource();
-        //     console.log("Elemento seleccionado:", itemList);
-        //     var oItem = itemList.getBindingContext().getObject()
-        //     console.log("oItem: ",oItem);
-        //     var that = this;
-        //     that.getView().setModel(new sap.ui.model.json.JSONModel(oItem),"header");
+        onAttachmentPress: function(oEvent) {
+            debugger
+            var ModeloPrincipal = this.getView().getModel('detail');
 
-        //     console.log("datos: ",  that.getView().setModel(new sap.ui.model.json.JSONModel(oItem),"header"));
-            
-        //     //var sOrigin = oItem.getCustomData()[0].getValue();
-        //     //var sWorkitemID = oItem.getCustomData()[1].getValue();
+            console.log("Modelo principal: ",ModeloPrincipal);
 
-        //     // Construcción de la URL para expandir datos
-        //     var sPath =  "/WorkflowTaskCollection(SAP__Origin='LOCAL',WorkitemID='" + oItem.WorkitemID + "')/HeaderDetails";
-        //     var aExpand = ["ItemDetails", "Notes", "Attachments","ItemDetails/Limits"];
+            var oItem = oEvent.getSource().getBindingContext("detail").getObject();
 
-        //     console.log("ruta: ", sPath);
-            
-        //     var oModel = this.getView().getModel();
+            if(!oItem || !oItem.AttachmentGuid || !oItem.SAP__Origin){
+                sap.m.MessageToast.show("No se encontré el archivo adjunto");
+            }
 
-        //     // Realizar la llamada OData
-        //     oModel.read(sPath, {
-        //         urlParameters: {
-        //             "$expand": aExpand.join(',')
-        //         },
-        //         success: function(oData) {
-        //             debugger
-        //             sap.m.MessageToast.show("Datos cargados con éxito");
-                    
-        //             that.getView().setModel(new sap.ui.model.json.JSONModel(oData),"detail");
-        //             console.log("Modelo: ",oData);
-        //         },
-        //         error: function(oError) {
-        //             debugger
-        //             sap.m.MessageToast.show("Error al cargar los datos");
-        //             console.error(oError);
-        //         }
-        //     });
-        // },
-   
+            var AttachmentGuid = oItem.AttachmentGuid;
+            var SAP__Origin = oItem.SAP__Origin;
+
+            console.log("Verificación: ",oItem);
+
+            var sPath = `/AttachmentCollection(SAP__Origin='${SAP__Origin}',AttachmentGuid='${AttachmentGuid}')/$value`;
+        
+
+            var oModel = this.getView().getModel();
+
+
+            var sServiceUrl = oModel.sServiceUrl + sPath
+
+            console.log("Url construida: ", sServiceUrl);
+
+            window.open(sServiceUrl, '_blank');
+        
+        },
+
+        
         _handleSelectPress: function (oEvent) {
+            debugger
             /* Is this a phone */
-            console.log("_handleSelectPress");
+            console.log("_handleSelectPress evento: ",oEvent);
             var isPhone;
             isPhone = this.getView().getModel("device").getData().isPhone;
             if (isPhone) {
@@ -1133,6 +1123,8 @@ sap.ui.define([
         },
    
         fireSelectionChange: function (e) {
+            debugger
+            console.log("Evento: ",e);
             $.selectedItems = e.getSource().getSelectedItems();
             console.log("fireSelectionChange");
         },
@@ -1151,9 +1143,13 @@ sap.ui.define([
    
         fnCargarAprobadores: function (oEvent) {
             if (oEvent.getSource().getBindingContext()) {
+                debugger
                 $.PoNumber = oEvent.getSource().getBindingContext().getObject().PoNumber;
+                console.log("Vericiación si: ", $.PoNumber);
             } else {
+                debugger
                 $.PoNumber = oEvent.getSource().getSelectedItem().getBindingContext().getObject().PoNumber;
+                console.log("Vericiación No: ", $.PoNumber);
    
             }
         },
@@ -1268,8 +1264,6 @@ sap.ui.define([
             } else {
                 console.error("No se encontró el SplitApp en ninguno de los métodos");
             }
-
-            
         },
 
         onServiceLinePress: function (oEvent) {
